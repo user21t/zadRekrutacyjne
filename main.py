@@ -1,4 +1,6 @@
 from picamera2 import Picamera2
+from os import makedirs
+import sys
 from flask import Flask, session
 
 picam2 = Picamera2()
@@ -12,7 +14,17 @@ picam2.start()
 # Kamera zostaje włączona
 
 img_dir = "static/img/"
-# Katalog, gdzie są umieszczane zdjęcia z kamery
+# Lokalizacja katalogu, gdzie są umieszczane zdjęcia z kamery
+
+try:
+  makedirs(img_dir)
+  print(f"Katalog {img_dir} pomyślnie utworzony.")
+except FileExistsError:
+  print(f"Katalog {img_dir} już istnieje.")
+except Exception as e:
+  print(f"Błąd: {e}")
+  sys.exit(1)
+# Utwórz katalog ze ścieżką względną "static/img/"
 
 app = Flask(__name__, static_url_path='/static')
 # Obiekt klasy Flask - prostego serwera WWW - został zainicjowany
