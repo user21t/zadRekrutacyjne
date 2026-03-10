@@ -13,7 +13,7 @@ Skrypt w języku Python, który przywraca przesyłanie obrazu z Raspberry Pi w d
 `pip install -r requirements.txt`
 
 ## Rozwiązanie problemu
-Aby zamontowany w UAV mikrokomputer Raspberry Pi Zero W mógł przesyłać zdjęcia z podłączonej kamery,
+Aby zamontowany w UAV mikrokomputer Raspberry Pi Zero mógł przesyłać zdjęcia z podłączonej kamery,
 niezbędna do jej obsługi jest pakiet [Picamera2](https://github.com/raspberrypi/picamera2).
 Jako iż jednym z założeń projektu jest odbieranie obrazu przez przeglądarkę internetową, postanowiłem
 zastosować mikroframework do serwerów WWW - [Flask](https://github.com/pallets/flask). Przekształciłem
@@ -21,7 +21,7 @@ Raspberry Pi w taki serwer, aby móc łatwo wysyłać zrobione zdjęcie do klien
 Polega to na tym, że kamera robi zdjęcie co 10 sekund wraz z wysłaniem przez klienta ponownego żądania
 udostępnienia zawartości strony głównej do serwera. Obrazy są zapisane w pamięci trwałej mikrokomputera.
 
-Modem Wi-Fi jest podłączony do laptopa w stacji naziemnej jako punkt dostępowy (AP). Umożliwia to demon `hostapd`.
+Modem Wi-Fi jest podłączony do bezzałogowego statku powietrznego jako punkt dostępowy (AP). Umożliwia to demon `hostapd`.
 Poniżej jest plik konfiguracyjny, który zapewnia najlepszą obsługę obecnych kart sieciowych przez AP w zabezpieczonym połączeniu:
 ```
 # Interfejs używany przez modem
@@ -47,4 +47,12 @@ wpa=2
 wpa_key_mgmt=WPA-PSK
 rsn_pairwise=CCMP
 wpa_passphrase=haslo_do_zmiany
+```
+Konfiguracja statyczna interfejsu sieciowego modemu - `/etc/network/interfaces`:
+```
+auto wlan0
+iface wlan0 inet static
+    address 10.10.10.1 # Adres IP serwera
+    netmask 255.255.255.0 # Maska podsieci
+    # Nie ma bramy domyślnej, gdyż komputer jest serwerem
 ```
